@@ -1,10 +1,12 @@
 # DOCODEx4
 Nuevo algoritmo para la atribución de autores basado en n-gramas
-Source
-    Directorio principal en la cual se dispondrá de todas las carpetas a analizar y el archivo de texto truth.txt si es que se desea analizar las respuestas de dicho análisis. 
+Source:
+
+Directorio principal en la cual se dispondrá de todas las carpetas a analizar y el archivo de texto truth.txt si es que se desea analizar las respuestas de dicho análisis. 
     
-Result
-    Directorio principal que se utilizará para dejar la carpeta de resultados obtenida de una ejecución. Como cada carpeta se identifica con el $n$ utilizado en la prueba, el día con la hora, minutos y segundos de creación, no existirá problema de sobre-escritura al ejecutar los mismos experimentos.
+Result:
+
+Directorio principal que se utilizará para dejar la carpeta de resultados obtenida de una ejecución. Como cada carpeta se identifica con el $n$ utilizado en la prueba, el día con la hora, minutos y segundos de creación, no existirá problema de sobre-escritura al ejecutar los mismos experimentos.
     
 Fases
     Directorio que contiene las fuentes de los experimentos descritos en la sección \ref{sec:fases} y sus correspondientes resultados. 
