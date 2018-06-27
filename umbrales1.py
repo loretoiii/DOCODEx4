@@ -1,3 +1,4 @@
+import sys
 import xlwt
 import xlrd
 from xlutils.copy import copy
@@ -7,26 +8,25 @@ import numpy
 import time
 import os.path
 
-SOURCES_FOLDER_PATH = '/home/loretoi/MEMORIA/Memoria-DOCODEx3-master/DOCODEX3/Sources/'
+#SOURCES_FOLDER_PATH = '/home/loretoi/MEMORIA/Memoria-DOCODEx3-master/DOCODEX3/Sources/'
 
 class umbral(object):
-    def __new__(cls,list_datos_docode, list_datos_normalizados, list_datos_segmentos,identificador, RESULT_FOLDER_PATH,lmdas):
+    def __new__(cls,list_datos_docode, list_datos_normalizados, list_datos_segmentos,identificador, RESULT_FOLDER_PATH, SOURCES_FOLDER_PATH,lmdas):
 
-        #print("identificador: " + str(identificador))
         if identificador==1:
             listasolreal = list()
             listacarpetas = list()
             if(os.path.isfile(SOURCES_FOLDER_PATH+"truth.txt")):
-
                 soluciones = open(SOURCES_FOLDER_PATH+"truth.txt","r")
                 for linea in soluciones.readlines():
-                    #print linea
                     if linea != '':
                         carpeta,solucion=linea.split(" ")
                         listacarpetas.append(carpeta)
                         listasolreal.append(solucion)
                 soluciones.close()
-                #print("lista carpetas: "+str(listacarpetas))
+            #else:
+             #   print("El archivo de soluciones no existe en la carpeta: \n " + SOURCES_FOLDER_PATH)
+              #  return
 
                 # Crear Excel Result General
                 resultado = xlwt.Workbook()

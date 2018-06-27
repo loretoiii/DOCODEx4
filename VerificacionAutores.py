@@ -3,7 +3,7 @@ import glob
 import sys
 import os
 from text2 import TEXT
-from graficame import grafico
+from graficame4 import grafico
 from umbrales1 import umbral
 from GraficarResultados import grafresultados
 from MatrizConfusion import matriz
@@ -20,25 +20,26 @@ import plotly.graph_objs as go
 from plotly.graph_objs import Scatter, Layout
 
 #VARIABLES GLOBALES
-SOURCES_FOLDER_PATH = '/home/loretoi/MEMORIA/Memoria-DOCODEx3-master/DOCODEx4/Sources/'
-SOURCES_GRAF_FOLDER_PATH = '/home/loretoi/MEMORIA/Memoria-DOCODEx3-master/DOCODEx4/'
-RESULT_FOLDER_PATH = '/home/loretoi/MEMORIA/Memoria-DOCODEx3-master/DOCODEx4/Results/'
+SOURCES_FOLDER_PATH = '/home/loretoi/MEMORIA/Memoria-DOCODEx3-master/DOCODEX3/Sources/'
+SOURCES_GRAF_FOLDER_PATH = '/home/loretoi/MEMORIA/Memoria-DOCODEx3-master/DOCODEX3/'
+RESULT_FOLDER_PATH = '/home/loretoi/MEMORIA/Memoria-DOCODEx3-master/DOCODEX3/Results/'
 
 
 if __name__ == "__main__":
     numero_carpetas=len(glob.glob(SOURCES_FOLDER_PATH+"*"))
     files_1 = glob.glob(SOURCES_FOLDER_PATH+'*')
-    #Se definen los segmentos largos m-palabras
-    m = 400 #Ventana
-    n = 1 #n-grama
-    probar = 0 
-	# 0 = Carpeta de training, no hay segmento limintante. 
-	# 1 = Carpeta de test, hay segmento y se debe cambiar las listas: lista1 para docode, lista2 docode normalizado y lista3 docode norm por segmento
- 
+    # Se definen los segmentos largos m-palabras
+    m = 400  # Ventana
+    n = 1  # n-grama
+    probar = 0
+    # 0 = Carpeta de training o test sin segmento limintante, se toma umbral limitante.
+    # 1 = Carpeta de test, hay segmento y se debe cambiar las listas
+    # lista1 para docode, lista2 docode normalizado y lista3 docode norm por segmento
     lista1 = list()
     lista2 = list()
     lista3 = list()
     if probar == 1:
+        #definir segmento para cada algoritmo
         lista1 = [0,1,1,0,0,1,1,1,1,1]
         lista2 = [0,0,0,0,0,1,1,1,0,1]
         lista3 = [0,0,0,0,0,1,1,1,0,1]
@@ -46,11 +47,12 @@ if __name__ == "__main__":
         lista1 = [0]
         lista2 = [0]
         lista3 = [0]
-	# lambdas a revisar
-    lmdas = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0,
-             2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3.0]
+    #definicion de lambdas
+    lmdas = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3.0]
+    #definicion del umbral limitante
     lista_porcentajes = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
-	# Entrar en cada una de las carpetas que tengo y revisar los documentos
+
+    # Entrar en cada una de las carpetas que tengo y revisar los documentos
     path_folder = list()
     for i in files_1:
         if os.path.isdir(i):
@@ -118,24 +120,16 @@ if __name__ == "__main__":
         matriz_docode = list()
         colum=1
         for i in data_known:
-            # print 'estilo documento: %f' % i['style']
             text_prueba.write('DATA CONOCIDA - estilo documento: ' + str(i['style']) + "\n")
-            # print 'd de segmentos: '+str(i['differences'])
             text_prueba.write('d de segmentos: ' + str(i['differences']) + "\n")
             d_aux += i['differences']
-            #print("colum-> "+str(colum-1)+" fila-> 0")
-            #print(str(i['differences']))
             matriz_docode.append(i['differences'])
-            #matriz_dif[colum-1][0]=i['differences']
             lista_estilos_conocidos.append(i['style'])
-            #print "lista estilo --> "+str(lista_estilos_conocidos)
             text_excel.write("archivo" + str(colum) + ", ," + str(i['style']) + "," + str(i['differences']) + "\n")
             d_num = d_num + 1
             colum = colum + 1
 
         if len(d_aux):
-            #print "lista estilo --> " + str(lista_estilos_conocidos)
-            #datos_analisis.append(lista_estilos_conocidos.append(i['style']))
             promedio = numpy.average(d_aux)
             mediana = numpy.median(d_aux)
             std = numpy.std(d_aux)
@@ -147,16 +141,12 @@ if __name__ == "__main__":
         # Para la data del documento desconocido
 
         for i in data_unknown:
-            # print 'estilo documento: %f' % i['style']
-            # print 'd de segmentos: '+str(i['differences'])
             text_prueba.write('DATA DESCONOCIDA - estilo documento: ' + str(i['style']) + "\n")
             text_prueba.write('d de segmentos: ' + str(i['differences']) + "\n")
             text_excel.write("archivo" + str(d_num) + "," + str(i['style']) + ", ," + str(i['differences']) + "\n")
             d_aux += i['differences']
-            #matriz_dif[colum - 1][0] = i['differences']
             matriz_docode.append(i['differences'])
             estilo_todos = numpy.average(lista_estilos_conocidos)
-            # print "estilo todos --> "+str(estilo_todos)
             text_excel.write("archivo" + str(colum) +"," + str(estilo_todos) + ", " + str(i['style']) + "\n")
             lista_estilos_conocidos = list()
 
@@ -165,9 +155,6 @@ if __name__ == "__main__":
             mediana = numpy.median(d_aux)
             text_prueba.write('mediana: ' + str(mediana) + ' -estilo doc desconocido: ' + str(promedio) + "\n")
 
-        #print(str(matriz_dif))
-        #for c in range(colum):
-         #   print(str(c))
 
 
         # DOCODE NORMALIZADO
@@ -262,32 +249,28 @@ if __name__ == "__main__":
             mediana = numpy.median(d_aux)
             text_prueba.write('mediana: ' + str(mediana) + ' -promedio doc desconocido: ' + str(promedio) + "\n")
 
-        #print(str(matriz_docode))
-        #print(str(matriz_docode_norm))
-        #print(str(matriz_docode_seg))
-
-        #Si la matriz existe, ninguna de las 3 estara vacia
-        text_prueba.write('\n Matriz DOCODE: ' + str(matriz_docode) + "\n")
         if matriz_docode:
-            #print(str(parent_dir))
-            #print(str(identificador))
             text_prueba.write("Hare grafico ... ir a Trace 2 :\n")
+            #graficame4 (delta y lamda base)
             nombre_archivo = grafico(matriz_docode, matriz_docode_norm, matriz_docode_seg,str(parent_dir),RESULT_FOLDER_PATH)
-            umbral(matriz_docode, matriz_docode_norm, matriz_docode_seg, identificador, RESULT_FOLDER_PATH, lmdas)
+            #excel
+            umbral(matriz_docode, matriz_docode_norm, matriz_docode_seg, identificador, RESULT_FOLDER_PATH, SOURCES_FOLDER_PATH, lmdas)
             print("OK "+str(nombre_archivo))
-        #print(str(identificador))
         identificador = identificador + 1
+
+
 
     text_excel.close()
     text_prueba.close()
     ## Llamar a graficar resultados
+
     grafresultados(RESULT_FOLDER_PATH, SOURCES_FOLDER_PATH,lmdas)
     matriz(RESULT_FOLDER_PATH, lmdas, lista_porcentajes)
     histogram(RESULT_FOLDER_PATH,SOURCES_FOLDER_PATH, lmdas, lista_porcentajes)
     histogram2(RESULT_FOLDER_PATH, SOURCES_FOLDER_PATH, lmdas, lista_porcentajes)
     #histogram3(RESULT_FOLDER_PATH, SOURCES_FOLDER_PATH, lmdas, lista_porcentajes)
     #histogram4(RESULT_FOLDER_PATH, SOURCES_FOLDER_PATH, lmdas, lista_porcentajes)
-
-    b0b1(RESULT_FOLDER_PATH, lmdas, lista_porcentajes, probar, lista1,lista2,lista3)
+    #Resumen Final
+    b0b1(RESULT_FOLDER_PATH, SOURCES_FOLDER_PATH, lmdas, lista_porcentajes, probar, lista1,lista2,lista3)
 
     sys.exit()

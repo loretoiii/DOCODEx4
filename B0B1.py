@@ -14,8 +14,7 @@ import plotly.graph_objs as go
 SOURCES_FOLDER_PATH = '/home/loretoi/MEMORIA/Memoria-DOCODEx3-master/DOCODEX3/Sources/'
 
 class b0b1(object):
-    def __new__(cls, RESULT_FOLDER_PATH, lmdas, lista_porcentajes, probar, lista1, lista2, lista3 ):
-
+    def __new__(cls, RESULT_FOLDER_PATH, SOURCES_FOLDER_PATH, lmdas, lista_porcentajes, probar, lista1, lista2, lista3 ):
 
         # Abrir archivo para leer
         file = open(RESULT_FOLDER_PATH + "Resultados.txt", "r")
